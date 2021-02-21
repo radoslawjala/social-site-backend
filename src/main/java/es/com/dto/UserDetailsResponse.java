@@ -1,51 +1,26 @@
 package es.com.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class UserDetailsResponse {
 
     private String firstname;
     private String lastname;
     private String hobbies;
     private String phoneNumber;
+    private byte[] pictureBytes;
 
-    public UserDetailsResponse(String firstname, String lastname, String hobbies, String phoneNumber) {
+    public UserDetailsResponse(String firstname, String lastname, String hobbies, String phoneNumber, byte[] pictureBytes) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.hobbies = hobbies;
         this.phoneNumber = phoneNumber;
+        this.pictureBytes = pictureBytes;
     }
 
     public UserDetailsResponse() {
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getHobbies() {
-        return hobbies;
-    }
-
-    public void setHobbies(String hobbies) {
-        this.hobbies = hobbies;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 }

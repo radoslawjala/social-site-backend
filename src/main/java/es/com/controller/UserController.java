@@ -4,6 +4,7 @@ import es.com.dto.MessageResponse;
 import es.com.dto.UserDetailsResponse;
 import es.com.model.User;
 import es.com.repository.UserRepository;
+import es.com.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,9 +27,10 @@ public class UserController {
         Optional<User> userOptional = userRepository.findById(Long.parseLong(id));
         if(userOptional.isPresent()) {
             User user = userOptional.get();
+            byte[] pictureBytes = ImageService.decompressBytes(user.getUserDetails().getImageBytes());
             return ResponseEntity.ok(new UserDetailsResponse(user.getUserDetails().getFirstname(),
                     user.getUserDetails().getLastname(), user.getUserDetails().getHobbies(),
-                    String.valueOf(user.getUserDetails().getPhoneNumber())));
+                    String.valueOf(user.getUserDetails().getPhoneNumber()), pictureBytes));
         }
 
         return ResponseEntity.badRequest().body(new MessageResponse("Error: Something bad happened"));
