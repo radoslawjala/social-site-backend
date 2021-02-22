@@ -48,9 +48,10 @@ public class UserController {
             ArrayList<ExtendedUserResponse> responseList = new ArrayList<>();
             for(User user: allUsers) {
                 UserDetails details = user.getUserDetails();
+                byte[] pictureBytes = ImageService.decompressBytes(details.getImageBytes());
                 ExtendedUserResponse resultUser = new ExtendedUserResponse(user.getUsername(),
                         details.getFirstname(), details.getLastname(), details.getHobbies(),
-                        String.valueOf(details.getPhoneNumber()), user.getEmail());
+                        String.valueOf(details.getPhoneNumber()), user.getEmail(), pictureBytes);
                 responseList.add(resultUser);
             }
             return ResponseEntity.ok(responseList);
