@@ -5,24 +5,22 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserDetailsResponse {
+public class AllUserListUserDetails {
 
+    private String id;
     private String username;
     private String firstname;
     private String lastname;
-    private String hobbies;
-    private String phoneNumber;
     private byte[] pictureBytes;
 
-    public UserDetailsResponse(String username, String firstname, String lastname, String hobbies, String phoneNumber, byte[] pictureBytes) {
+    public AllUserListUserDetails(String id, String username, String firstname, String lastname, byte[] pictureBytes) {
+        this.id = id;
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.hobbies = hobbies;
-        this.phoneNumber = phoneNumber;
         this.pictureBytes = pictureBytes;
     }
 
-    public UserDetailsResponse() {
+    public AllUserListUserDetails() {
     }
 }

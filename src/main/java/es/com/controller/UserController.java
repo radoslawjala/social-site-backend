@@ -1,6 +1,6 @@
 package es.com.controller;
 
-import es.com.dto.ExtendedUserResponse;
+import es.com.dto.AllUserListUserDetails;
 import es.com.dto.MessageResponse;
 import es.com.dto.UserDetailsResponse;
 import es.com.model.User;
@@ -32,7 +32,7 @@ public class UserController {
         if(userOptional.isPresent()) {
             User user = userOptional.get();
             byte[] pictureBytes = ImageService.decompressBytes(user.getUserDetails().getImageBytes());
-            return ResponseEntity.ok(new UserDetailsResponse(user.getUserDetails().getFirstname(),
+            return ResponseEntity.ok(new UserDetailsResponse(user.getUsername(), user.getUserDetails().getFirstname(),
                     user.getUserDetails().getLastname(), user.getUserDetails().getHobbies(),
                     String.valueOf(user.getUserDetails().getPhoneNumber()), pictureBytes));
         }
@@ -45,13 +45,12 @@ public class UserController {
     public ResponseEntity<?> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
         if(allUsers != null) {
-            ArrayList<ExtendedUserResponse> responseList = new ArrayList<>();
+            ArrayList<AllUserListUserDetails> responseList = new ArrayList<>();
             for(User user: allUsers) {
                 UserDetails details = user.getUserDetails();
                 byte[] pictureBytes = ImageService.decompressBytes(details.getImageBytes());
-                ExtendedUserResponse resultUser = new ExtendedUserResponse(user.getUsername(),
-                        details.getFirstname(), details.getLastname(), details.getHobbies(),
-                        String.valueOf(details.getPhoneNumber()), user.getEmail(), pictureBytes);
+                AllUserListUserDetails resultUser = new AllUserListUserDetails(String.valueOf(user.getId()),
+                        user.getUsername(), details.getFirstname(), details.getLastname(), pictureBytes);
                 responseList.add(resultUser);
             }
             return ResponseEntity.ok(responseList);
