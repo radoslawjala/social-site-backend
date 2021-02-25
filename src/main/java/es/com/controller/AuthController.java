@@ -82,8 +82,6 @@ public class AuthController {
     public ResponseEntity<?> registerUser(MultipartFile file,
               @Valid @ModelAttribute SignupRequest signUpRequest, BindingResult result) {
 
-        System.out.println(signUpRequest);
-
         if(result.hasErrors()) {
             List<ObjectError> errors = result.getAllErrors();
             errors.forEach(err -> log.error(err.getDefaultMessage()));
