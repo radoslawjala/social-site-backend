@@ -1,9 +1,10 @@
 package es.com.controller;
 
-import es.com.dto.AllUserListUserDetails;
-import es.com.dto.MessageResponse;
-import es.com.dto.UserDetailsResponse;
-import es.com.dto.UserPostRequest;
+import es.com.dto.response.AllUserListUserDetails;
+import es.com.dto.response.MessageResponse;
+import es.com.dto.response.UserDetailsResponse;
+import es.com.dto.request.UserPostRequest;
+import es.com.dto.response.UserPostResponse;
 import es.com.model.User;
 import es.com.model.UserDetails;
 import es.com.model.UserPost;
@@ -77,10 +78,23 @@ public class UserController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Incorrect post fields"));
         }
         else {
-            UserPost userPost = new UserPost(userPostRequest.getUserID(), userPostRequest.getTitle(), userPostRequest.getContent());
+            UserPost userPost = new UserPost(userPostRequest.getUserID(), userPostRequest.getTitle(), userPostRequest.getContent(), userPostRequest.getDate());
             userPostRepository.save(userPost);
         }
 
         return ResponseEntity.ok(new MessageResponse("post message"));
+    }
+
+    @GetMapping("/userPosts/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<?> getUserPosts(@PathVariable String id) {
+        List<UserPost> userPosts = userPostRepository.findByUserID(id);
+
+        List<UserPostResponse> result = new ArrayList<>();
+        for(UserPost userPost: userPosts) {
+            UserPostResponse response = new UserPostResponse(userPost.getTitle(), userPost.getContent(), userPost.getDate());
+            result.add(response);
+        }
+        return ResponseEntity.ok(result);
     }
 }

@@ -1,14 +1,14 @@
 package es.com.controller;
 
 
-import es.com.dto.JwtResponse;
-import es.com.dto.LoginRequest;
+import es.com.dto.response.JwtResponse;
+import es.com.dto.request.LoginRequest;
 import es.com.model.ERole;
 import es.com.model.Role;
 import es.com.model.User;
 import es.com.model.UserDetails;
-import es.com.dto.MessageResponse;
-import es.com.dto.SignupRequest;
+import es.com.dto.response.MessageResponse;
+import es.com.dto.request.SignupRequest;
 import es.com.repository.RoleRepository;
 import es.com.repository.UserRepository;
 import es.com.security.jwt.JwtUtils;

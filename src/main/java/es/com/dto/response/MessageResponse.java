@@ -1,4 +1,4 @@
-package es.com.dto;
+package es.com.dto.response;
 
 public class MessageResponse {
 

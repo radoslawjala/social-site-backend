@@ -23,11 +23,14 @@ public class UserPost {
     private String title;
     @Column(nullable = false)
     private String content;
+    @Column
+    private String date;
 
-    public UserPost(String userID, String title, String content) {
+    public UserPost(String userID, String title, String content, String date) {
         this.userID = userID;
         this.title = title;
         this.content = content;
+        this.date = date;
     }
 
     public UserPost() {
