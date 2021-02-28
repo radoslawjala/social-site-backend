@@ -1,5 +1,6 @@
 package es.com.controller;
 
+import es.com.dto.request.UpdateDataRequest;
 import es.com.dto.response.AllUserListUserDetails;
 import es.com.dto.response.MessageResponse;
 import es.com.dto.response.UserDetailsResponse;
@@ -18,8 +19,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -96,5 +99,39 @@ public class UserController {
             result.add(response);
         }
         return ResponseEntity.ok(result);
+    }
+
+    @PatchMapping("/update")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<?> updateUserData(MultipartFile file, @Valid @ModelAttribute UpdateDataRequest updateDataRequest, BindingResult result) {
+
+        if(result.hasErrors()) {
+            List<ObjectError> errors = result.getAllErrors();
+            errors.forEach(err -> log.error(err.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Incorrect update fields"));
+        }
+
+        Optional<User> userOptional = userRepository.findById(Long.valueOf(updateDataRequest.getId()));
+        if(userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.getUserDetails().setFirstname(updateDataRequest.getFirstname());
+            user.getUserDetails().setLastname(updateDataRequest.getLastname());
+            user.getUserDetails().setHobbies(updateDataRequest.getHobbies());
+            user.getUserDetails().setPhoneNumber(Integer.parseInt(updateDataRequest.getPhoneNumber()));
+
+            byte[] image = new byte[0];
+            try {
+                image = ImageService.compressBytes(file.getBytes());
+            } catch (IOException e) {
+                log.error("Photo compression error");
+            }
+            user.getUserDetails().setImageBytes(image);
+
+            userRepository.save(user);
+
+            return ResponseEntity.ok(new MessageResponse("User data updated successfully!"));
+        }
+
+        return ResponseEntity.badRequest().body(new MessageResponse("User doesn't exist"));
     }
 }
