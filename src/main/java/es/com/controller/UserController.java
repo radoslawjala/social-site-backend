@@ -1,5 +1,6 @@
 package es.com.controller;
 
+import es.com.dto.request.ChangePasswordRequest;
 import es.com.dto.request.UpdateDataRequest;
 import es.com.dto.response.AllUserListUserDetails;
 import es.com.dto.response.MessageResponse;
