@@ -24,7 +24,7 @@ public class UserDetails {
     private String hobbies;
     @Column(name = "phone_number")
     private int phoneNumber;
-    @Column(name= "image_bytes", length = 1000)
+    @Column(name = "image_bytes", length = 1000)
     @ToString.Exclude
     private byte[] imageBytes;
 

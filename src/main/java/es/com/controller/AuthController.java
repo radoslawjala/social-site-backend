@@ -83,11 +83,11 @@ public class AuthController {
 
     @PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> registerUser(MultipartFile file,
-              @Valid @ModelAttribute SignupRequest signUpRequest, BindingResult result) {
+                                          @Valid @ModelAttribute SignupRequest signUpRequest, BindingResult result) {
 
         System.out.println(signUpRequest);
 
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             List<ObjectError> errors = result.getAllErrors();
             errors.forEach(err -> log.error(err.getDefaultMessage()));
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Incorrect signup fields"));
@@ -139,7 +139,7 @@ public class AuthController {
         }
 
         UserDetails userDetails = new UserDetails(signUpRequest.getFirstname(),
-                signUpRequest.getLastname(),signUpRequest.getDateOfBirth(), signUpRequest.getCity(),
+                signUpRequest.getLastname(), signUpRequest.getDateOfBirth(), signUpRequest.getCity(),
                 signUpRequest.getHobbies(), Integer.parseInt(signUpRequest.getPhoneNumber()), image);
 
         user.setUserDetails(userDetails);
@@ -153,9 +153,9 @@ public class AuthController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> changePassword(@Valid @ModelAttribute ChangePasswordRequest changePasswordRequest) {
         Optional userOptional = userRepository.findById(Long.valueOf(changePasswordRequest.getUserID()));
-        if(userOptional.isPresent()) {
+        if (userOptional.isPresent()) {
             User user = (User) userOptional.get();
-            if(!encoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+            if (!encoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
                 return ResponseEntity.badRequest().body(new MessageResponse("Bad old password"));
             }
             user.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));

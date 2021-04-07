@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 @Log4j2
 @RestController
 @RequestMapping("api/users")
@@ -43,7 +44,7 @@ public class UserController {
     public ResponseEntity<?> getUserDetails(@PathVariable String id) {
 
         Optional<User> userOptional = userRepository.findById(Long.parseLong(id));
-        if(userOptional.isPresent()) {
+        if (userOptional.isPresent()) {
             User user = userOptional.get();
             byte[] pictureBytes = ImageService.decompressBytes(user.getUserDetails().getImageBytes());
             return ResponseEntity.ok(new UserDetailsResponse(user.getUsername(), user.getUserDetails().getFirstname(),
@@ -58,9 +59,9 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
-        if(allUsers != null) {
+        if (allUsers != null) {
             ArrayList<AllUserListUserDetails> responseList = new ArrayList<>();
-            for(User user: allUsers) {
+            for (User user : allUsers) {
                 UserDetails details = user.getUserDetails();
                 byte[] pictureBytes = ImageService.decompressBytes(details.getImageBytes());
                 AllUserListUserDetails resultUser = new AllUserListUserDetails(String.valueOf(user.getId()),
@@ -76,12 +77,11 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> addUserPost(@Valid @ModelAttribute UserPostRequest userPostRequest, BindingResult result) {
 
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             List<ObjectError> errors = result.getAllErrors();
             errors.forEach(err -> log.error(err.getDefaultMessage()));
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Incorrect post fields"));
-        }
-        else {
+        } else {
             UserPost userPost = new UserPost(userPostRequest.getUserID(), userPostRequest.getTitle(), userPostRequest.getContent(), userPostRequest.getDate());
             userPostRepository.save(userPost);
         }
@@ -95,7 +95,7 @@ public class UserController {
         List<UserPost> userPosts = userPostRepository.findByUserID(id);
 
         List<UserPostResponse> result = new ArrayList<>();
-        for(UserPost userPost: userPosts) {
+        for (UserPost userPost : userPosts) {
             UserPostResponse response = new UserPostResponse(userPost.getTitle(), userPost.getContent(), userPost.getDate());
             result.add(response);
         }
@@ -106,14 +106,14 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> updateUserData(MultipartFile file, @Valid @ModelAttribute UpdateDataRequest updateDataRequest, BindingResult result) {
 
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             List<ObjectError> errors = result.getAllErrors();
             errors.forEach(err -> log.error(err.getDefaultMessage()));
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Incorrect update fields"));
         }
 
         Optional<User> userOptional = userRepository.findById(Long.valueOf(updateDataRequest.getId()));
-        if(userOptional.isPresent()) {
+        if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.getUserDetails().setFirstname(updateDataRequest.getFirstname());
             user.getUserDetails().setLastname(updateDataRequest.getLastname());

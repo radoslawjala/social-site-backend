@@ -25,7 +25,7 @@ public class User {
     private String password;
     @Column(nullable = false, unique = true)
     private String email;
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_details_id")
     private UserDetails userDetails;
 
