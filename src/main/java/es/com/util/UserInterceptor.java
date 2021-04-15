@@ -8,6 +8,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -24,8 +25,8 @@ public class UserInterceptor  implements ChannelInterceptor {
             if (raw instanceof Map) {
                 Object name = ((Map) raw).get("username");
 
-                if (name instanceof LinkedList) {
-                    accessor.setUser(new User(((LinkedList) name).get(0).toString()));
+                if (name instanceof ArrayList) {
+                    accessor.setUser(new User(((ArrayList) name).get(0).toString()));
                 }
             }
         }

@@ -25,7 +25,7 @@ public class WebSocketConnectionRestController {
 //        System.out.println(title);
 //    }
     @PostMapping("/rest/user-connect")
-    public ResponseEntity<?> userConnect(@RequestBody String username, HttpServletRequest request) {
+    public ResponseEntity<?> userConnect(@RequestBody User user, HttpServletRequest request) {
         String remoteAddr = "";
         if (request != null) {
             remoteAddr = request.getHeader("Remote_Addr");
@@ -36,9 +36,9 @@ public class WebSocketConnectionRestController {
                 }
             }
         }
-        System.out.println("username:" + username + ", remoteAddr: " + remoteAddr);
-        activeSessionManager.add(username, remoteAddr);
-        return ResponseEntity.ok(new MessageResponse("powinno być sikalafa żelafą żymbalade sur nymbła"));
+        System.out.println("username:" + user.getUserName() + ", remoteAddr: " + remoteAddr);
+        activeSessionManager.add(user.getUserName(), remoteAddr);
+        return ResponseEntity.ok(new MessageResponse("powinno być ok"));
     }
 
 //    @GetMapping("/rest/user-connect/info")
